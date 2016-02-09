@@ -45,3 +45,14 @@ def LorentzDistribution(x, x0, gamma, A):
   """
   P = A/(np.pi*gamma*(1+((x-x0)/gamma)**2))
   return P
+
+def ExponentialC(A, tau, c, t_0):
+    """Exponential curve with constant offsets in x and y direction
+
+    :A: prefactor to the exponential
+    :tau: inverse decay rate
+    :c: constant y offset
+    :t_0: constant x offset
+
+    """
+    return A*np.exp((t-t_0)/tau) + c
