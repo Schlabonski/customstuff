@@ -29,14 +29,22 @@ def remove_ticks(axe, top=True, right=True):
       top='off',         # ticks along the top edge are off
       labelbottom='on') # labels along the bottom edge are off
 
-def plot_function_w_uc(axe, x, function, par_uc):
+def plot_function_w_uc(axe, x, function, par_uc, **kwargs):
     """Plots a function with shaded area for uncertainties.
 
     :axe: subfigure to plot on
     :x: x-values to plot on
-    :function: function to plot
+    :function: function to plot, should be a function with full 
+               support for uncertainties
     :par_uc: parameters using uncertainties.correlated_values
-    :returns: 0
-
     """
-    pass 
+    result_uc = function(x, *par_uc)
+    result_n = uc.unumpy.nominal_values(result_uc)
+    result_std = uc.unumpy.std_devs(result_uc)
+    result_upper = result_n + result_std
+    result_lower = result_n - result_std
+
+    line = axe.plot(x, result_n, **kwargs)
+    color = line[0].get_color() #????
+    
+    axe.fill_between(x, result_lower, result_upper, color=color, alpha=.3)
